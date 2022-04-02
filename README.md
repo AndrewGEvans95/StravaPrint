@@ -7,6 +7,7 @@ A silly little project to convert poyline data from Strava to a dithered image t
 ## Materials Needed
 
 - Cat Thermal Printer
+-- ![Cat Printer](cat_printer.jpg)
 - Strava account
 
 ## Goals Checklist
