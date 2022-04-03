@@ -22,11 +22,15 @@ def get_polyline_data(access_token, page):
     data = requests.get(activities_url, headers=headers, params=params).json()
     polyline_data = data[0]['map']['summary_polyline']
     polyline_data = polyline.decode(polyline_data)
-    return polyline_data
+    strava_activity_title = data[0]['name']
+    strava_mileage = data[0]['distance']
+    # Convert meters to miles
+    strava_mileage = round(strava_mileage * 0.000621371, 2)
+    return polyline_data, strava_activity_title, strava_mileage
 
 
 # Plot polyline data using matplotlib
-def plot_polyline(polyline_data):
+def plot_polyline(polyline_data, strava_activity_title, strava_mileage):
     activity_longitude = []
     activity_latitude = []
     for point in polyline_data:
@@ -35,13 +39,14 @@ def plot_polyline(polyline_data):
    
     plt.plot(activity_longitude, activity_latitude, 'r-', alpha=1, linewidth=4)
     plt.axis('off')
+    plt.title(strava_activity_title + ': '+ str(strava_mileage) + ' miles')
     plt.savefig('map.png', bbox_inches='tight', bbox_extra_artists=[], transparent=True)
     plt.show()
 
 
 
-polyline_data = get_polyline_data(access_token, 1)
+polyline_data, strava_activity_title, strava_mileage = get_polyline_data(access_token, 1)
 print('Polyline data retrieved')
 print(polyline_data)
 
-plot_polyline(polyline_data)
+plot_polyline(polyline_data, strava_activity_title, strava_mileage)
