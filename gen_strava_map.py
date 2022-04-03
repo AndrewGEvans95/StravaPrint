@@ -1,6 +1,7 @@
 # Use strava_auth.py to check if access token is still valid
 # Import strava_auth.py
 import strava_auth
+
 import requests
 import polyline
 import matplotlib.pyplot as plt
@@ -31,12 +32,12 @@ def plot_polyline(polyline_data):
     for point in polyline_data:
         activity_longitude.append(point[0])
         activity_latitude.append(point[1])
-    plt.plot(activity_longitude, activity_latitude, 'r-', alpha=1)
-    #plt.savefig('map.png', bbox_inches='tight')
-    # Save figure without axis labels and ticks and transparent background
+   
+    plt.plot(activity_longitude, activity_latitude, 'r-', alpha=1, linewidth=4)
     plt.axis('off')
     plt.savefig('map.png', bbox_inches='tight', bbox_extra_artists=[], transparent=True)
     plt.show()
+
 
 
 polyline_data = get_polyline_data(access_token, 1)
