@@ -39,7 +39,7 @@ def plot_polyline(polyline_data, strava_activity_title, strava_mileage):
    
     plt.plot(activity_longitude, activity_latitude, 'r-', alpha=1, linewidth=4)
     plt.axis('off')
-    plt.title(strava_activity_title + ': '+ str(strava_mileage) + ' miles')
+    plt.title(strava_activity_title + ': '+ str(strava_mileage) + ' miles', fontsize=20, fontweight='bold', color='red')
     plt.savefig('map.png', bbox_inches='tight', bbox_extra_artists=[], transparent=True)
     plt.show()
 
