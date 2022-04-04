@@ -21,6 +21,6 @@ A silly little project to convert poyline data from Strava to a dithered image t
 - [x] Generate basic PNG image plot of activity polyline
   - ![Latest activity](map.png)
 
-- [ ] Create dithered image for printing
+- [x] Create dithered image for printing
 
-- [ ] Print to cat mini thermal printer
+- [x] Print to cat mini thermal printer
