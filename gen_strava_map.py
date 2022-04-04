@@ -7,13 +7,6 @@ import polyline
 import matplotlib.pyplot as plt
 
 
-if not strava_auth.check_access_token():
-    # If access token is not valid, use refresh token to generate new access token
-    strava_auth.refresh_access_token()
-
-
-access_token = strava_auth.get_access_token_from_file()
-
 # Retrieve polyline data from Strava API and return decoded polyline points
 def get_polyline_data(access_token, page):
     activities_url = 'https://www.strava.com/api/v3/athlete/activities'
@@ -41,12 +34,17 @@ def plot_polyline(polyline_data, strava_activity_title, strava_mileage):
     plt.axis('off')
     plt.title(strava_activity_title + ': '+ str(strava_mileage) + ' miles', fontsize=20, fontweight='bold', color='red')
     plt.savefig('map.png', bbox_inches='tight', bbox_extra_artists=[], transparent=True)
-    plt.show()
+    #plt.show()
+    plt.close()
 
-
-
-polyline_data, strava_activity_title, strava_mileage = get_polyline_data(access_token, 1)
-print('Polyline data retrieved')
-print(polyline_data)
-
-plot_polyline(polyline_data, strava_activity_title, strava_mileage)
+def create_map_image(access_token, page):
+    if not strava_auth.check_access_token():
+        # If access token is not valid, use refresh token to generate new access token
+        strava_auth.refresh_access_token()
+    print("Retrieving polyline data from latest activity...")
+    access_token = strava_auth.get_access_token_from_file()
+    polyline_data, strava_activity_title, strava_mileage = get_polyline_data(access_token, 1)
+    print('Polyline data retrieved')
+    #print(polyline_data)
+    
+    plot_polyline(polyline_data, strava_activity_title, strava_mileage)

@@ -8,10 +8,13 @@ from catprinter.cmds import PRINT_WIDTH, cmds_print_img
 from catprinter.ble import run_ble
 from catprinter.img import read_img
 
+import strava_auth
+import gen_strava_map
+
 def parse_args():
     args = argparse.ArgumentParser(
         description='prints an image on your cat thermal printer')
-    args.add_argument('filename', type=str)
+
     args.add_argument('--log-level', type=str,
                       choices=['debug', 'info', 'warn', 'error'], default='info')
     args.add_argument('--img-binarization-algo', type=str,
@@ -33,6 +36,7 @@ def parse_args():
                           but slower speed.")
     return args.parse_args()
 
+
 def make_logger(log_level):
     logger = logging.getLogger('catprinter')
     logger.setLevel(log_level)
@@ -41,18 +45,32 @@ def make_logger(log_level):
     logger.addHandler(h)
     return logger
 
+
 def main():
     args = parse_args()
 
     log_level = getattr(logging, args.log_level.upper())
     logger = make_logger(log_level)
 
-    filename = args.filename
+    # Retrieve access token from strava api
+    logger.info('⏳ Retrieving access token from Strava...')
+    access_token = strava_auth.get_access_token_from_file()
+    if access_token is None:
+        logger.info('Failed to retrieve access token from file.')
+    else:
+        logger.info('✅ Access token retrieved.')
+    # Create strava map image
+    logger.info('⏳ Generating strava map image...')
+    img_strava_map = gen_strava_map.create_map_image(access_token, 1)
+    logger.info('✅ Done.')
+
+    filename = 'map.png'
+    args.filename = filename
     if not os.path.exists(filename):
         logger.info('🛑 File not found. Exiting.')
         return
 
-    bin_img = read_img(args.filename, PRINT_WIDTH,
+    bin_img = read_img('map.png', PRINT_WIDTH,
                        logger, args.img_binarization_algo, args.show_preview)
     if bin_img is None:
         logger.info(f'🛑 No image generated. Exiting.')

@@ -20,19 +20,6 @@ def generate_auth_link():
     auth_link = 'https://www.strava.com/oauth/authorize?client_id=' + client_id + '&redirect_uri=' + redirect_uri + '&response_type=code&scope=' + scope
     return auth_link
 
-auth_code = 'b2a4220ab45244816b7bc65e1c8d2e7dd0169d90'
-
-def get_access_token(client_id, client_secret, refresh_token):
-    url = 'https://www.strava.com/api/v3/oauth/token'
-    params = {
-        'client_id': client_id,
-        'client_secret': client_secret,
-        'code': auth_code,
-        'grant_type': 'authorization_code',
-    }
-    response = requests.post(url, params)
-    return response.json()['access_token']
-
 # Retrieve access token from local file
 def get_access_token_from_file():
     access_token = ''
@@ -66,8 +53,8 @@ def write_refresh_token_to_file(refresh_token):
         f.write(refresh_token)
 
 auth_link = generate_auth_link()
-print('Please visit the following link to authenticate with Strava:')
-print(auth_link)
+#print('Please visit the following link to authenticate with Strava:')
+#print(auth_link)
 
 # Use authorization code to get access token and refresh token
 # OAuth takes 4 params: client_id, client_secret, code, grant_type
@@ -135,7 +122,7 @@ if not check_refresh_token():
 else:
     # check if access token is valid
     if check_access_token():
-        print('Access token is still valid')
+        print('Strava access token is still valid')
     else:
         # refresh access token
         refresh_token = get_refresh_token_from_file()
